@@ -9,13 +9,7 @@ def read_file(file_path):
     """
     ## Open the CSV file
     # Se utiliza la función open() para abrir el archivo CSV en modo lectura ('r').
-    # Se especifica el parámetro newline='' para evitar problemas de salto de línea en diferentes sistemas operativos.
-    # Se utiliza el parámetro encoding='utf-8' para asegurar que el archivo se lea correctamente en diferentes codificaciones.
-    # Se utiliza la función csv.reader() para leer el contenido del archivo CSV.
     with open(file_path, mode='r', newline='', encoding='utf-8') as csvfile:
-        # Se utiliza la función next() para omitir la primera fila del archivo CSV, que generalmente contiene los encabezados.
-        # Se inicializa una lista vacía llamada operations para almacenar las transacciones.
-        # Se utiliza un bucle for para iterar sobre cada fila del archivo CSV.
         # Cada fila se almacena como un diccionario con las claves 'id', 'type' y 'amount'.
         # Se utiliza la función float() para convertir el monto a un número decimal.
         # Se utiliza la función replace() para eliminar el símbolo '$' del monto antes de convertirlo a float.
