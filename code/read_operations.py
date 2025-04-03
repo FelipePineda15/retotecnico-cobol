@@ -7,18 +7,31 @@ def read_file(file_path):
     :param file_path: Path to the CSV file.
     :return: List of dictionaries representing the rows in the CSV file.
     """
+    ## Open the CSV file
+    # Se utiliza la función open() para abrir el archivo CSV en modo lectura ('r').
+    # Se especifica el parámetro newline='' para evitar problemas de salto de línea en diferentes sistemas operativos.
+    # Se utiliza el parámetro encoding='utf-8' para asegurar que el archivo se lea correctamente en diferentes codificaciones.
+    # Se utiliza la función csv.reader() para leer el contenido del archivo CSV.
     with open(file_path, mode='r', newline='', encoding='utf-8') as csvfile:
+        # Se utiliza la función next() para omitir la primera fila del archivo CSV, que generalmente contiene los encabezados.
+        # Se inicializa una lista vacía llamada operations para almacenar las transacciones.
+        # Se utiliza un bucle for para iterar sobre cada fila del archivo CSV.
+        # Cada fila se almacena como un diccionario con las claves 'id', 'type' y 'amount'.
+        # Se utiliza la función float() para convertir el monto a un número decimal.
+        # Se utiliza la función replace() para eliminar el símbolo '$' del monto antes de convertirlo a float.
         reader = csv.reader(csvfile)
-        row = 0
+        next(reader)
         operations = []
         for record in reader:
-            if row > 0:
-                operations.append({
-                    'id': record[0],
-                    'type': record[1],
-                    'amount': float(record[2].replace('$', '')) if type(record[2]) != float else record[2],
-                })
-            row += 1
+            operations.append({
+                'id': record[0],
+                'type': record[1],
+                'amount': float(record[2].replace('$', '')) if type(record[2]) != float else record[2],
+            })
+    # Se devuelve la lista de operaciones procesadas.
+    # La lista contiene diccionarios con las transacciones leídas del archivo CSV.
+    # Cada diccionario tiene las claves 'id', 'type' y 'amount'.
+    # Se utiliza la función return para devolver la lista de operaciones.
         return proccess_info(operations)
         
 def proccess_info(operations):
@@ -28,6 +41,9 @@ def proccess_info(operations):
     :param operations: List of dictionaries representing the transactions.
     :return: None
     """
+    ## Initialize variables
+    # Estas variables se inicializan para almacenar el balance final y los conteos de transacciones.
+    # Se inicializan a 0 para evitar errores de referencia antes de la asignación.
     credit_transations = 0
     balance_final = 0
     most_values_transactions = 0
@@ -35,7 +51,12 @@ def proccess_info(operations):
     debit_count = 0
     debit_transations = 0
 
+    ## Process transactions
+    # Se itera sobre cada transacción en la lista de operaciones.
     for transaction in operations:
+        ## Se verifica el tipo de transacción (Crédito o Débito) y se actualizan las variables correspondientes.
+        # Se utiliza un condicional para determinar si la transacción es de tipo 'Crédito' o 'Débito'.
+        # Dependiendo del tipo, se suman o restan los montos de las transacciones al balance final.
         if transaction['type'] == 'Crédito':
             credit_transations += float(transaction['amount'])
             credit_count += 1
@@ -44,7 +65,11 @@ def proccess_info(operations):
             debit_count += 1
         else:
             print(f'Tipo de transacción no válida: {transaction.get("id")} {transaction.get("type")}')
+        # Se actualiza el balance final sumando las transacciones de crédito y restando las de débito.
         balance_final = credit_transations + debit_transations
+    # Se determina la transacción de mayor monto utilizando la función max() y una expresión lambda.
+    # Se utiliza la función max() para encontrar la transacción con el monto más alto en la lista de operaciones.
+    # La expresión lambda se utiliza para extraer el monto de cada transacción y compararlo.
     most_values_transactions = max(operations, key=lambda x: x['amount'])
     return print_message(balance_final, most_values_transactions, credit_count, debit_count)
 
@@ -57,6 +82,10 @@ def print_message(balance_final, most_values_transactions, credit_count, debit_c
     :param debit_count: Count of debit transactions.
     :return: None
     """
+    # Se imprime un mensaje formateado que muestra el balance final, la transacción de mayor monto y el conteo de transacciones.
+    # Se utiliza la función print() para mostrar el mensaje en la consola.
+    # Se utiliza una cadena de formato para incluir las variables en el mensaje.
+    # Se utiliza la función f-string para formatear el mensaje con los valores de las variables.
     print(f"""Reporte de Transacciones:
 ------------------------------------------------------
 Balance Final: {balance_final}
